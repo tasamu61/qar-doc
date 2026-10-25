@@ -1,0 +1,124 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QAR 現行システム技術設計書 — ソース解析版</title>
+<style>
+:root{--bg:#f4f7fb;--paper:#fff;--ink:#1b2b40;--muted:#5d6c80;--line:#dbe4ef;--blue:#1756b4;--teal:#087d79;--amber:#ae640b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.85 system-ui,"Yu Gothic","Meiryo",sans-serif}
+header{background:linear-gradient(130deg,#10233f,#174c78 65%,#0b777e);color:white;padding:64px max(28px,calc((100vw - 1120px)/2));}
+header h1{font-size:clamp(30px,4vw,50px);line-height:1.3;margin:8px 0 12px}header p{max-width:850px;color:#e4f0ff}header .eyebrow{font-size:12px;letter-spacing:.2em;color:#a9d5f7;font-weight:800}
+.layout{display:grid;grid-template-columns:235px minmax(0,1fr);max-width:1250px;margin:auto;gap:30px;padding:32px 24px 80px}
+nav{position:sticky;top:22px;align-self:start;background:white;border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:8px}
+nav a{text-decoration:none;color:#344b65;font-size:13px;padding:7px;border-radius:6px}nav a:hover{background:#edf5ff;color:var(--blue)}
+main{min-width:0}.section{background:white;border:1px solid var(--line);border-radius:15px;padding:32px;margin-bottom:24px;box-shadow:0 6px 18px #17365a09}
+h2{font-size:25px;line-height:1.4;margin:0 0 14px;border-bottom:2px solid #e8eff7;padding-bottom:13px}h3{font-size:17px;margin:22px 0 9px;color:#194b7e}
+p{margin:10px 0}small,.subtle{color:var(--muted)}.lead{font-size:17px;color:#2c4a69}.tag{display:inline-block;font-size:11px;font-weight:750;border-radius:99px;padding:3px 10px;margin:0 5px 5px 0;background:#eaf3ff;color:#1756b4}.tag.warn{background:#fff3df;color:#986014}.tag.good{background:#e1f5ef;color:#08785c}
+.panel{border-radius:12px;background:#f5f9fe;padding:17px;margin:15px 0;border:1px solid #dbe8f6}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{background:#f0f6fd;border-radius:10px;padding:16px}.metric strong{font-size:24px;color:#135e9b;display:block}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch;margin:22px 0}.node{flex:1;min-width:118px;border:1.5px solid #9ebbd6;background:#f4f9ff;border-radius:10px;text-align:center;padding:13px 10px;font-weight:700;font-size:13px}.node small{display:block;font-weight:400;line-height:1.4}.arrow{align-self:center;color:#1a77a1;font-size:22px;font-weight:800}
+table{width:100%;border-collapse:collapse;margin:15px 0;font-size:13px}th{background:#eaf2fa;text-align:left}th,td{border:1px solid #d7e1ec;padding:9px 11px;vertical-align:top}code{font-family:Consolas,monospace;background:#edf3f9;border-radius:4px;padding:2px 4px;font-size:12px}pre{background:#13253c;color:#edf6ff;padding:17px;border-radius:10px;overflow:auto;line-height:1.7}pre code{background:none;color:inherit;font-size:13px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:15px}.card{border:1px solid var(--line);border-radius:12px;padding:18px}.card h3{margin-top:0}.note{border-left:4px solid #df9947;background:#fff8ed;padding:12px 16px;margin:14px 0}
+ul{padding-left:23px}li{margin:5px 0}.foot{color:#65788e;font-size:12px}.diagram{width:100%;height:auto;background:#f8fbff;border:1px solid #dce8f4;border-radius:12px}
+@media(max-width:850px){.layout{display:block;padding:16px}nav{position:static;margin-bottom:18px;display:flex;overflow:auto}nav a{white-space:nowrap}.section{padding:20px}.cols,.grid{grid-template-columns:1fr}.arrow{display:none}}
+@media print{body{background:white}header{padding:25px;background:#fff;color:#123}header p{color:#345}nav{display:none}.layout{display:block;padding:0}.section{box-shadow:none;break-inside:avoid}}
+</style></head><body>
+<header><div class="eyebrow">QAR / ENGINEERING DOCUMENTATION</div><h1>QAR 現行システム<br>技術設計書</h1>
+<p>2002年版の設計思想を踏まえ、2026年10月25日提供の <strong>qar-fixed.zip</strong> をソース解析して作成した技術資料。構成、API、制御フロー、AI接続、品質と未実装領域を、実装根拠とともに示す。</p>
+<span class="tag good">ソース解析に基づく</span><span class="tag">HTML単体で閲覧可能</span><span class="tag warn">実装済み／構想を分離</span></header>
+<div class="layout"><nav><a href="#overview">01　概要と結論</a><a href="#architecture">02　実装アーキテクチャ</a><a href="#sequence">03　処理シーケンス</a><a href="#data">04　データとインターフェース</a><a href="#providers">05　AI接続方式</a><a href="#quality">06　セキュリティと品質</a><a href="#comparison">07　2002年版との対比</a><a href="#roadmap">08　課題・拡張案</a></nav><main>
+<section class="section" id="overview"><h2>01 / 概要と結論</h2>
+<p class="lead">QARは、利用者に質問を提示して回答を収集し、希望に合う旅行先などを提案するWebアプリケーションである。現行版では推奨処理の中心をLLMに委ねている。</p>
+<div class="grid"><div class="metric"><strong>4</strong>AI提供元の選択肢</div><div class="metric"><strong>3</strong>主要POST API</div><div class="metric"><strong>7</strong>固定旅行質問</div></div>
+<p>2002年版は独自の数値評価ロジックを核としたシステム。現行版は、質問の生成と回答からの提案生成を外部AIに依頼する設計へ転換した。ただし、現在のZIPではRAG/FAISSや独自スコアリングエンジンは実装として確認できない。</p>
+<p class="foot">根拠：README.md、web_serv.py、texts/pharse.py、docs/KNOWN_ISSUES.md</p></section>
+<section class="section" id="architecture"><h2>02 / 実装アーキテクチャ</h2>
+<svg class="diagram" viewBox="0 0 840 360" role="img" aria-label="QARシステム構成図">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#5082a8"/></marker></defs>
+<rect x="25" y="118" width="166" height="104" rx="12" fill="#e5f1ff" stroke="#4b85b5" stroke-width="2"/><text x="108" y="145" text-anchor="middle" font-size="16" font-weight="bold" fill="#173a64">ブラウザ</text><text x="108" y="169" text-anchor="middle" font-size="13" fill="#173a64">Vue 3 / HTML</text><text x="108" y="190" text-anchor="middle" font-size="12" fill="#173a64">static/vue_app.js</text>
+<rect x="263" y="98" width="236" height="144" rx="12" fill="#e7f6f3" stroke="#2e9b8d" stroke-width="2"/><text x="381" y="126" text-anchor="middle" font-size="17" font-weight="bold" fill="#08675c">Flask API</text><text x="381" y="150" text-anchor="middle" font-size="13" fill="#08675c">web_serv.py</text><text x="381" y="175" text-anchor="middle" font-size="12" fill="#08675c">SessionManager / Limiter</text><text x="381" y="199" text-anchor="middle" font-size="12" fill="#08675c">プロンプト・提供元選択</text><text x="381" y="221" text-anchor="middle" font-size="11" fill="#08675c">texts/pharse.py</text>
+<path d="M191 166 H261" stroke="#5082a8" stroke-width="2.5" marker-end="url(#ar)"/><text x="226" y="154" text-anchor="middle" font-size="10" fill="#345">JSON</text>
+<path d="M499 166 H561" stroke="#5082a8" stroke-width="2.5" marker-end="url(#ar)"/>
+<rect x="562" y="18" width="248" height="64" rx="10" fill="#f3efff" stroke="#8e77bf"/><text x="686" y="44" text-anchor="middle" font-size="14" fill="#403178">OpenAI / openai_ai.py</text><text x="686" y="64" text-anchor="middle" font-size="11" fill="#403178">Chat Completions</text>
+<rect x="562" y="96" width="248" height="64" rx="10" fill="#f3efff" stroke="#8e77bf"/><text x="686" y="122" text-anchor="middle" font-size="14" fill="#403178">Google / google_ai.py</text><text x="686" y="142" text-anchor="middle" font-size="11" fill="#403178">Generative AI SDK</text>
+<rect x="562" y="174" width="248" height="64" rx="10" fill="#f3efff" stroke="#8e77bf"/><text x="686" y="200" text-anchor="middle" font-size="14" fill="#403178">Groq / groq_ai.py</text><text x="686" y="220" text-anchor="middle" font-size="11" fill="#403178">HTTP API</text>
+<rect x="562" y="252" width="248" height="75" rx="10" fill="#fff3df" stroke="#cb8a30" stroke-dasharray="5 4"/><text x="686" y="280" text-anchor="middle" font-size="14" fill="#8a5913">self / self_ai.py</text><text x="686" y="300" text-anchor="middle" font-size="11" fill="#8a5913">localhost:8000 スタブ</text><text x="686" y="317" text-anchor="middle" font-size="10" fill="#8a5913">独自LLM完成ではない</text>
+<path d="M537 166 V50 H560 M537 128 H560 M537 205 H560 M537 290 H560" stroke="#5082a8" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+<text x="28" y="337" font-size="11" fill="#60748a">実線：現行ソースで確認した実装 ／ 破線：スタブの位置づけ</text></svg>
+<p>サーバは <code>ALLOWED_LLMS = ("openai","google","groq","self")</code> の許可リストを使い、<code>importlib.import_module(f"{llm}_ai")</code> で提供元モジュールを選択する。クライアント指定の任意モジュールを読み込まない設計になっている。</p>
+<p class="foot">根拠：web_serv.py 12行付近、66–126行付近、framework/aop_session.py、各 *_ai.py</p></section>
+<section class="section" id="sequence"><h2>03 / 処理シーケンス</h2>
+<h3>標準的な利用フロー</h3>
+<div class="flow"><div class="node">① トップ画面<small>GET /<br>セッション発行</small></div><span class="arrow">→</span><div class="node">② 質問取得<small>POST /get_questions<br>LLM生成 or 固定</small></div><span class="arrow">→</span><div class="node">③ 回答入力<small>Vue formValues<br>質問別に保持</small></div><span class="arrow">→</span><div class="node">④ 提案取得<small>POST /get_result<br>LLMで推薦生成</small></div><span class="arrow">→</span><div class="node">⑤ 結果表示<small>候補一覧<br>Google検索リンク</small></div></div>
+<pre><code>Browser          Flask                Provider
+  | GET /          |                      |
+  |--------------->| session_idを発行     |
+  | POST questions |                      |
+  |--------------->| get_prompt_q()       |
+  |                |--------------------->| get_result()
+  |<---------------| questions JSON       |
+  | 回答入力       |                      |
+  | POST result    |                      |
+  |--------------->| get_prompt_r()       |
+  |                |--------------------->| get_result()
+  |<---------------| result JSON          |
+  | 画面に表示     |                      |</code></pre>
+<div class="note">旅行モードの <code>/get_questions_travel</code> はLLMを呼ばず、固定7問を返す。<code>self</code> を選んだ質問生成も固定質問を返す。</div>
+<p class="foot">根拠：static/vue_app.js、web_serv.py、texts/pharse.py</p></section>
+<section class="section" id="data"><h2>04 / データとインターフェース</h2>
+<table><thead><tr><th>API</th><th>入力</th><th>出力</th><th>備考</th></tr></thead><tbody>
+<tr><td><code>GET /</code></td><td>なし</td><td>HTML＋署名付きCookie</td><td>セッションIDを新規発行</td></tr>
+<tr><td><code>POST /get_questions</code></td><td>theme, sendInstruction, aillm等</td><td><code>{"questions":[...]}</code></td><td>AI生成。selfは固定質問</td></tr>
+<tr><td><code>POST /get_questions_travel</code></td><td>JSON</td><td><code>{"questions":[...]}</code></td><td>旅行用固定7問</td></tr>
+<tr><td><code>POST /get_result</code></td><td><code>answer.theme</code>、<code>answer.answers</code>、<code>answer.aillm</code>等</td><td><code>{"result":[...]}</code>想定</td><td>提供元の戻り値を返却</td></tr></tbody></table>
+<div class="cols"><div class="card"><h3>質問の形式</h3><pre><code>{
+ "questions": [
+  {"id": 1,
+   "text": "出発地は？",
+   "type": "text",
+   "choices": []}
+ ]
+}</code></pre><p class="subtle">type: single / multiple / text / text1</p></div>
+<div class="card"><h3>回答送信の形式</h3><pre><code>{
+ "answer": {
+  "theme": "旅行",
+  "aillm": "openai",
+  "sendInstruction": "",
+  "answers": [
+   {"question": "出発地は？",
+    "answer": "横浜"}
+  ]
+ }
+}</code></pre></div></div>
+<p>推薦結果は <code>data.result</code> をフロント側で <code>map()</code> し、<code>destination</code> などを使ってGoogle検索用URLを組み立てる。AIからの応答内容について、サーバ共通のJSONスキーマ検証は実装されていない。</p>
+<p class="foot">根拠：static/vue_app.js、web_serv.py、texts/pharse.py、docs/KNOWN_ISSUES.md</p></section>
+<section class="section" id="providers"><h2>05 / AI接続方式</h2>
+<table><thead><tr><th>提供元</th><th>実装</th><th>プロンプトと結果</th><th>位置づけ</th></tr></thead><tbody>
+<tr><td>OpenAI</td><td><code>openai_ai.py</code></td><td>Chat Completions API。<code>functions/function_call</code>形式を使用。モデル指定 <code>gpt-4o-mini</code></td><td><span class="tag good">実装</span></td></tr>
+<tr><td>Google</td><td><code>google_ai.py</code></td><td><code>google.generativeai</code>。コード上のモデル指定は <code>gemini-3.6-flash</code>。JSON解析失敗時の型が不統一</td><td><span class="tag good">実装</span><span class="tag warn">稼働可否未検証</span></td></tr>
+<tr><td>Groq</td><td><code>groq_ai.py</code></td><td>OpenAI互換HTTP API、モデル指定 <code>openai/gpt-oss-20b</code>。応答形式の揺れを複数パターンで解析</td><td><span class="tag good">実装</span></td></tr>
+<tr><td>self</td><td><code>self_ai.py</code> ＋ <code>selfai_serv.py</code></td><td><code>http://localhost:8000/get_result</code> へのHTTP要求。別サーバはスタブ</td><td><span class="tag warn">実験・未完成</span></td></tr></tbody></table>
+<p>各モジュールに <code>get_prompt_q</code>、<code>get_prompt_r</code>、<code>get_result</code> を設ける設計だが、戻り値の型は辞書、文字列、タプルなどで統一されていない。これは将来のProviderインターフェース共通化候補。</p>
+<p class="foot">根拠：各 *_ai.py、selfai_serv.py、docs/ARCHITECTURE.md</p></section>
+<section class="section" id="quality"><h2>06 / セキュリティ・品質・運用</h2>
+<div class="cols"><div class="card"><h3>実装済みの防御</h3><ul><li>許可リストによるAIモジュール選択</li><li>署名付きCookieのセッションID</li><li>メモリ上の有効セッション照合</li><li>Flask-Limiterによる呼び出し制限</li><li>旧資料のパス解決に <code>safe_join</code> を使用</li><li>APIキーを環境変数で取得</li></ul></div><div class="card"><h3>運用上の注意</h3><ul><li>セッションとレート制限はワーカー間で共有されない</li><li>AI応答の共通スキーマ検証がない</li><li>AIの異常応答時のエラー処理が不統一</li><li>ログに質問やプロンプトが残る</li><li>AIが生成するURLの真偽検証がない</li><li>本番では環境変数 <code>SEED</code> が必須</li></ul></div></div>
+<h3>テストの二層構成</h3>
+<div class="flow"><div class="node">単体・結合テスト<small>tests/*.py<br>外部AIはモック</small></div><span class="arrow">＋</span><div class="node">実AI回帰テスト<small>reg_test.py<br>reg_test2.py</small></div><span class="arrow">→</span><div class="node">API仕様変更を検知<small>モデル変更・JSON形式<br>例外・動作差分</small></div></div>
+<pre><code>python -m unittest discover -s tests -t . -v</code></pre>
+<p>テストファイルには、セッション、レート制限、提供元ごとのレスポンス解析、HTTPエラー、旧資料配信、パストラバーサル対策などの検証が含まれる。今回はテストコードの静的解析であり、外部APIへの接続試験や本番稼働確認は行っていない。</p>
+<p class="foot">根拠：tests/、reg_test.py、reg_test2.py、framework/aop_session.py、docs/KNOWN_ISSUES.md</p></section>
+<section class="section" id="comparison"><h2>07 / 2002年版との対比</h2>
+<div class="cols"><div class="card"><span class="tag">2002年版</span><h3>決定的な評価・選択</h3><div class="flow"><div class="node">質問・回答</div><span class="arrow">→</span><div class="node">評価値の計算</div><span class="arrow">→</span><div class="node">候補の順位付け</div></div><p>回答と候補の評価データを数値的に結びつける方式。評価根拠を追跡しやすい反面、評価データの設計・保守が必要。</p></div><div class="card"><span class="tag">現行版</span><h3>LLMによる推奨生成</h3><div class="flow"><div class="node">質問・回答</div><span class="arrow">→</span><div class="node">プロンプト</div><span class="arrow">→</span><div class="node">LLM提案</div></div><p>柔軟な自然言語解釈と提案文生成が可能。ただし、評価基準の固定、根拠提示、再現性は別途設計が必要。</p></div></div>
+<p>今後の技術的な差別化として、2002年版の数値評価方式を再導入し、LLMは入力の解釈と説明生成を担う「ハイブリッド方式」が考えられる。ただし、これは現行ソースに実装済みの機能ではない。</p>
+<p class="foot">根拠：static/doc/2002/ の旧資料、README.md、docs/KNOWN_ISSUES.md</p></section>
+<section class="section" id="roadmap"><h2>08 / 課題・拡張案</h2>
+<table><thead><tr><th>機能</th><th>このZIPでの確認結果</th><th>資料上の扱い</th></tr></thead><tbody>
+<tr><td>Vue / Flaskによる質問・回答UI</td><td>実装あり</td><td><span class="tag good">現行機能</span></td></tr>
+<tr><td>OpenAI・Google・Groq切替</td><td>実装あり。ただし外部サービスの現時点の稼働は未確認</td><td><span class="tag good">現行機能</span></td></tr>
+<tr><td>独自LLM</td><td>self向けスタブあり。独自モデル本体の完成は確認できない</td><td><span class="tag warn">未完成</span></td></tr>
+<tr><td>RAG / FAISS / 旅行データベース</td><td>実行経路で確認できない</td><td><span class="tag warn">構想</span></td></tr>
+<tr><td>2002年式のスコア計算</td><td>現行API処理で確認できない</td><td><span class="tag warn">再導入候補</span></td></tr>
+<tr><td>JSONスキーマによるAI応答検証</td><td>共通検証なし</td><td><span class="tag warn">改善候補</span></td></tr>
+<tr><td>Redis等のセッション共有</td><td>未実装</td><td><span class="tag warn">改善候補</span></td></tr></tbody></table>
+<h3>優先順位の提案</h3><p><strong>第一段階：</strong>Providerの戻り値・例外・タイムアウトの統一、JSON応答検証、実AI回帰テストの安定化。<br><strong>第二段階：</strong>2002年版の評価方式と現行LLM方式の比較、推薦理由の明示。<br><strong>第三段階：</strong>旅行データ整備、RAG、対話的な追質問、必要に応じて独自LLMの接続。</p>
+<div class="note"><strong>資料の適用範囲：</strong>2026年10月25日提供の <code>qar-fixed.zip</code> の静的ソース解析。公開サイトの現在の稼働、外部AIモデルの有効性、GCP上の実際のデプロイ構成までは検証していない。実装にないものを実装済みとして記載しない。</div>
+<p class="foot">主な参照ファイル：web_serv.py / static/vue_app.js / framework/aop_session.py / texts/pharse.py / openai_ai.py / google_ai.py / groq_ai.py / self_ai.py / selfai_serv.py / tests/ / docs/ARCHITECTURE.md / docs/KNOWN_ISSUES.md / static/doc/2002/</p></section>
+<p class="foot">QAR Technical Design — source-based edition. 本資料はソースコードを転載せず、構造と技術上の特徴を説明するために作成。</p>
+</main></div></body></html>
