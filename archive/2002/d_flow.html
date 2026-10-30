@@ -1,0 +1,102 @@
+<HTML>
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0J Win">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=UTF-8">
+  <TITLE>３－２．処理の流れ</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><A HREF="d_data.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_msg.html">next</A><BR>
+<BR>
+<A NAME="s3-2"></A><B><FONT SIZE="+1" FACE="ＭＳ 明朝">３－２　処理の流れ</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　<BR>
+　本システムの大まな流れをサーバ・クライアント間のデータの流れに沿ってまとめ<BR>
+　ました。表現はクライアントから見た動きになっています。<BR>
+<BR>
+　　利用者がが本システムのＵＲＬにアクセスする。<BR>
+　　サーバより、クラスをダウンロード、アプレット起動し、初期化処理<BR>
+　　</FONT><A NAME="s3-2-1"></A><FONT FACE="ＭＳ 明朝">１）初期交渉　<BR>
+　　　　バージョン、データ種別のサーバとの交渉、セッションＩＤの取得<BR>
+　　</FONT><A NAME="s3-2-2"></A><FONT FACE="ＭＳ 明朝">２）実行データの取得<BR>
+　　　　質問・回答データのサーバよりの取得、質問実施画面の作成<BR>
+　　をおこないます。<BR>
+　　以降このアプレットはここで取得したセッションＩＤで管理されます。</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　　利用者が回答者情報を記入し、送信キーを押下する。<BR>
+　　</FONT><A NAME="s3-2-3"></A><FONT FACE="ＭＳ 明朝">３）ユーザデータの送信<BR>
+　　　　ユーザ情報をサーバに送信し、サーバ側でＤＢに書きこまれます。<BR>
+</FONT><BR>
+　　<FONT FACE="ＭＳ 明朝">　利用者が全質問に答え、ボタンを押下<BR>
+　　</FONT><A NAME="s3-2-4"></A><FONT FACE="ＭＳ 明朝">４）回答結果の送信、スコアデータの取得<BR>
+　　　　クライアントより回答結果が送信され、サーバは回答ＤＢに書きこみスコア<BR>
+　　　　を集計します。上位５位までのスコア値、リゾート名と最高スコアのリゾー<BR>
+　　　　トの説明文をクライアントに返します。<BR>
+　　クライアントはその情報を表示します。<BR>
+<BR>
+　メソッドフロー<BR>
+<BR>
+　　init()<BR>
+　　　　｜<BR>
+　　　　＋beforの表示<BR>
+　　　　｜<BR>
+　　　　＋addListener gogo() 開始ボタン<BR>
+　　　　｜<BR>
+　　　　＋addListenr bgo() 進むボタン<BR>
+　　　　｜<BR>
+　　　　＋addListener bback() 戻るボタン<BR>
+<BR>
+　　gogo()  <BR>
+　　　　｜<BR>
+　　　　＋conn()　初期交渉（post1.cgi)<BR>
+　　　　｜<BR>
+　　　　＋init_set()　実行環境設定<BR>
+　　　　｜　｜<BR>
+　　　　｜　＋getqa()　質問・回答情報のサーバからの取得　（post2-1.cgi）<BR>
+　　　　｜　｜　　　　　　<BR>
+　　　　｜　＋makqg()　質問・回答画面作成<BR>
+　　　　｜<BR>
+　　　　＋hyozi() カレント画面の入れ替え表示<BR>
+<BR>
+<BR>
+　　bgo()　画面を前進させる処理<BR>
+　　　　｜<BR>
+　　　　＋goact()　カレントな画面に付随する前進処理<BR>
+　　　　｜<BR>
+　　　　＋ hyozi() カレント画面の入れ替え表示<BR>
+<BR>
+<BR>
+　　bback()　画面を後退させる処理<BR>
+　　　　｜<BR>
+　　　　＋bback() カレントな画面に付随する後退時の処理<BR>
+　　　　｜<BR>
+　　　　＋hyozi() カレント画面の入れ替え表示<BR>
+<BR>
+<BR>
+　　Base.goact()　入力チェックおよび基本情報の送信<BR>
+　　　　｜<BR>
+　　　　＋ sendbase() 基本情報のサーバへの送信　（post2-2.cgi）<BR>
+<BR>
+<BR>
+　　QAG.goact()　入力データチェックおよび基本情報の送信　<BR>
+　　　　｜<BR>
+　　　　◇－＋　次画面がKekkaか？<BR>
+　　　　　　｜<BR>
+　　　　　　＋　Yes<BR>
+　　　　　　　　｜<BR>
+　　　　　　　　＋sendget() 回答結果を送信し、候補情報を得る　（post3.cgi） <BR>
+<BR>
+ <BR>
+<BR>
+ 　クライアントからのデータ渡し、サーバ側の処理起動はすべてサーバＣＧＩの起動<BR>
+で実現されていて。処理毎に接続は切断されるので、各処理間のつながりをもたせ<BR>
+るために、１）の処理でサーバ側でセッションＩＤを発行し、アプレットはその値を<BR>
+保持しています。サーバ側ＣＧＩ起動時にそのセッションＩＤを逐次送信し、処理間<BR>
+の同期をとります。<BR>
+<BR>
+</FONT><A HREF="d_data.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_msg.html">next</A>
+
+</BODY>
+</HTML>

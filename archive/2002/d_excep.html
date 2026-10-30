@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0J Win">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=UTF-8">
+  <TITLE>３－６　例外</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><A HREF="d_cgi.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="env.html">next</A><B><FONT SIZE="+1" FACE="ＭＳ 明朝"><BR>
+<BR>
+３－６　例外<BR>
+</FONT></B><FONT FACE="ＭＳ 明朝"><BR>
+<BR>
+<BR>
+<BR>
+　本システムでは以下の例外クラスを使用します。<BR>
+<BR>
+<B>３－６－１　class UExcep</B><BR>
+<BR>
+　　class UExcep extends RuntimeException</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　　プロパティ<BR>
+　　int errno;<BR>
+　　int adderr;<BR>
+　　String errmsg;<BR>
+　　String addmsg;<BR>
+<BR>
+　Ｊａｖａ　ＶＭよりスローされた例外は、捕捉されこの例外が新たにスローされ<BR>
+ます。また、Ｊａｖａ　ＶＭで例外とならず、プログラム上によるチェックで電文<BR>
+異常・入力ミスなどが見つかった場合も、この例外をスローします。<BR>
+　エラーの種別（下記のerrno）に従い各メソッドで適切なエラー処理をおこなない<BR>
+ます。<BR>
+<BR>
+<B>３－６－２　例外種別・処理基準<BR>
+</B><BR>
+　例外は番号により分類されます。<BR>
+　発生時の処理基準は以下のとおりです。<BR>
+</FONT></P>
+
+<P><B><FONT FACE="ＭＳ 明朝">３－６－２－１　システム内部で回復可能な例外</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　errno　200-299</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　クライアントサイドの入力誤り<BR>
+　　class MissExcep extends RuntimeException<BR>
+　　プロパティ値<BR>
+　　errno 210-219<BR>
+　　errmsg 個別の誤り修正促進メッセージ<BR>
+　<BR>
+　　errmsgの内容を表示し、操作者に再入力を促す。</FONT></P>
+
+<P><B><FONT FACE="ＭＳ 明朝">３－６－２－２　システム内部で回復不可能な例外</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　errno 300以上</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　java.lang.Exception （RuntimeException以外）<BR>
+　　errno=300-399</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　java.lang.Exception.RuntimeException　（UExcep以外）<BR>
+　　errno=400-499</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　エラー発生メッセージを表示し、操作者に処理の打ち切り、エラー報告を促す。</FONT></P>
+
+<P><B><FONT FACE="ＭＳ 明朝">３－６－２－２－１　サーバ側処理における例外</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　　class SrvExcep extends RuntimeException<BR>
+　　　errno 700-799</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　　　電文不正（サーバ側で発生）<BR>
+　　　　errno=720-729<BR>
+　　　環境変数異常<BR>
+　　　　errno=740-749<BR>
+　　　SIDが不正<BR>
+　　　　errno=761<BR>
+　　　ＤＢアクセス時エラー発生（付加コードあり）<BR>
+　　　　errno=780-789</FONT></P>
+
+<P><B><FONT FACE="ＭＳ 明朝">　　ローカルな処理での例外</FONT></B><FONT FACE="ＭＳ 明朝"><BR>
+800-899<BR>
+　　　class CliExcep extends RuntimeException<BR>
+　　　電文不正（クライアント側で発生）<BR>
+　　　　errno=820-840</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　java.lang.Error の発生<BR>
+　　errno 920<BR>
+　　便宜上エラー番号を割り当てているだけで、捕捉などの処理はおこないませ<BR>
+　　ん。</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　　+-Throwable<BR>
+　　　|<BR>
+　　　+-Exception<BR>
+　　　|　|<BR>
+　　　|　+-MissExcep 210-219　入力ミス、再入力促進し再実行<BR>
+　　　|　| ^^^^^^^^^<BR>
+　　　|　+-MissExcep,RuntimeException以外 300-399<BR>
+　　　|　|<BR>
+　　　|　+-RuntimeException 400-899<BR>
+　　　|　　 |<BR>
+|　　 + UExcpe以外 400-499（Javaで定義されている）例外　致命的バグ<BR>
+　　　|　　 | <BR>
+　　　|　　 +-UExcep ユーザ定義例外<BR>
+　　　|　　 ^|^^^^<BR>
+　　　|　　 　+-SrvExcep 700-799 サーバサイド例外<BR>
+　　　|　　 　| ^^^^^^^^ 　720-729 電文不正<BR>
+　　　|　　 　|　　　　　　740-749 環境変数異常<BR>
+　　　|　　 　|　　　　　　761　　 SID不正<BR>
+　　　|　　 　|　　　　　　780-789 電文不正<BR>
+　　　|　　 　|<BR>
+　　　|　　 　+-CliExcep 800-899 クライアントサイド例外<BR>
+　　　|　　 ^^^^^^^^<BR>
+　　　+-Error　&gt;900 実行不可、致命的<BR>
+<BR>
+</FONT><A HREF="d_cgi.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="env.html">next</A>
+
+</BODY>
+</HTML>

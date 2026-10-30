@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" role="img">
+<title>QAR のシステム構成（現行）</title>
+<desc>左に、利用者のブラウザと、開発・テスト用の PC が縦に並ぶ。ブラウザは、中央の GCP（本番）の HTTP サーバに接続し、HTTP サーバが Flask アプリを呼び、Flask アプリが AI 切り替えを通じて右側の外部の AI の API を呼ぶ。PC の Flask アプリも外部の AI の API を呼ぶ。自前 AI は将来の構想で、配置と接続は未定。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="0" y="0" width="680" height="470" fill="#FFFFFF"/>
+<rect x="40" y="137" width="150" height="84" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="40" y="262" width="150" height="120" rx="12" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.8"/>
+<rect x="52" y="316" width="126" height="48" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="230" y="44" width="220" height="270" rx="12" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.8"/>
+<rect x="246" y="104" width="188" height="48" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="246" y="176" width="188" height="48" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="246" y="248" width="188" height="48" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="490" y="44" width="150" height="276" rx="12" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.8"/>
+<rect x="506" y="102" width="118" height="46" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="506" y="166" width="118" height="46" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="506" y="230" width="118" height="46" rx="8" fill="#FFFFFF" stroke="#888780" stroke-width="0.8"/>
+<rect x="490" y="344" width="150" height="62" rx="12" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="5 4"/>
+<rect x="40" y="446" width="14" height="14" rx="3" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.8"/>
+<rect x="200" y="446" width="14" height="14" rx="3" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.8"/>
+<rect x="410" y="446" width="14" height="14" rx="3" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="3 2"/>
+<path d="M340 152 L340 174" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M340 224 L340 246" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M190 179 L210 179 L210 128 L244 128" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M434 272 L488 272" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M178 340 L210 340 L210 418 L472 418 L472 300 L488 300" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="115" y="165" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">ブラウザ</text>
+<text x="115" y="185" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">PC・スマホ</text>
+<text x="115" y="203" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">Vue.js</text>
+<text x="115" y="286" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#085041" text-anchor="middle" dominant-baseline="central">PC（開発・テスト）</text>
+<text x="115" y="304" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#0F6E56" text-anchor="middle" dominant-baseline="central">ブラウザも同じ PC</text>
+<text x="115" y="332" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">Flask アプリ</text>
+<text x="115" y="350" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">開発用サーバ内蔵</text>
+<text x="340" y="68" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#085041" text-anchor="middle" dominant-baseline="central">GCP（本番）</text>
+<text x="340" y="86" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#0F6E56" text-anchor="middle" dominant-baseline="central">HTTPS で公開</text>
+<text x="340" y="120" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">HTTP サーバ</text>
+<text x="340" y="138" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">gunicorn など</text>
+<text x="340" y="192" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">Flask アプリ</text>
+<text x="340" y="210" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">画面・API・セッション</text>
+<text x="340" y="264" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">AI 切り替え</text>
+<text x="340" y="282" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">選んだ提供元を呼ぶ</text>
+<text x="565" y="68" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#3C3489" text-anchor="middle" dominant-baseline="central">外部 AI の API</text>
+<text x="565" y="86" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#534AB7" text-anchor="middle" dominant-baseline="central">選んだ 1 つを呼ぶ</text>
+<text x="565" y="125" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">OpenAI</text>
+<text x="565" y="189" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">Gemini</text>
+<text x="565" y="253" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">Groq</text>
+<text x="565" y="367" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">自前 AI（将来）</text>
+<text x="565" y="387" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">配置・接続は未定</text>
+<text x="62" y="453" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#2C2C2A" text-anchor="start" dominant-baseline="central">自分のシステム</text>
+<text x="222" y="453" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#2C2C2A" text-anchor="start" dominant-baseline="central">外部サービス（AI の API）</text>
+<text x="432" y="453" font-family="'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP','Noto Sans CJK JP','IPAGothic',sans-serif" font-size="12" fill="#2C2C2A" text-anchor="start" dominant-baseline="central">将来・配置は未定</text>
+</svg>

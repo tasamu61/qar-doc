@@ -1,0 +1,222 @@
+<HTML>
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0J Win">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=UTF-8">
+  <TITLE>３－１．ＤＢ構造</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><A HREF="detail.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_flow.html">next<BR>
+</A><BR>
+<A NAME="s3-1"></A><B><FONT SIZE="+1" FACE="ＭＳ 明朝">３－１　ＤＢ構造</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+<BR>
+　本システムのデータはログの類を除いて、全てＰｏｓｔｇｒｅＳＱＬ上におかれます。<BR>
+　以下にＰｏｓｔｇｒｅＳＱＬ上のテーブルの一覧と作成のＳＱＬにコメントをつけて説<BR>
+明します。<BR>
+　<BR>
+</FONT><A NAME="s3-1-1"></A><B><FONT FACE="ＭＳ 明朝">３－１－１　テーブル一覧</FONT></B><FONT
+ FACE="ＭＳ 明朝">　　　　 　　　　　　　　　　　　　　　　<BR>
+　1)SCORE　　 スコア　　　　　　スコアリングする指標　　<BR>
+　2)RESORT　　リゾート　　　　　リゾート、名前、説明<BR>
+　3)RVALUE　　リゾートスコア値　各リゾートの持つスコア値<BR>
+　4)QUESTION　質問　　　　　　　質問一覧<BR>
+　5)ANSWER　　回答　　　　　　　質問に対応した回答の選択肢<BR>
+　6)AVALUE　　回答スコア値　　　各回答のスコア値<BR>
+　7)USER　　　回答者　　　　　　回答者に関する情報<BR>
+　8)KEKKA　　 結果　　　　　　　質問実施により得られた総括的な情報<BR>
+　9)KREC　　　回答結果　　　　　個々の質問に関する結果<BR>
+10)SESSION　 セッション情報　　アプレット実行時の進行状況を保持・更新す<BR>
+　　　　　　　　　　　　　　　　る。</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　1)～6)は内部のメンテナンスシステムによりデータ作成・修正され、アプレッ<BR>
+　ト実行時に参照されます。<BR>
+　7)～9)はアプレット上で利用者が入力したデータより作成されます。<BR>
+　10)はアプレットの進行状況により追加、逐次更新されます。進行状況の管理<BR>
+　のためにあるもので、システムの機能に直接関係ありません。</FONT></P>
+
+<P><A NAME="s3-1-2"></A><B><FONT FACE="ＭＳ 明朝">３－１－２　各テーブル詳細<BR>
+　</FONT></B><FONT FACE="ＭＳ 明朝">ＳＱＬコマンドなので、だいたいは理解していただけるとおもいますが、ＳＱ<BR>
+Ｌをご存知でない方や、ＰｏｓｔｇｒｅＳＱＬ独自拡張な文法については、Ｐｏ<BR>
+ｓｔｇｒｅＳＱＬのホームページでも参照してください。<BR>
+<BR>
+</FONT><A NAME="s3-1-2-1"></A><B><FONT FACE="ＭＳ 明朝">１）スコア</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　評価指標を保持するテーブルです。<BR>
+　　　　CREATE TABLE &quot;score&quot; ( -- スコア<BR>
+　　　　&quot;snm&quot; bigint NOT NULL, -- スコア番号<BR>
+　　　　&quot;inf&quot; character varying(200) NOT NULL, -- スコアの説明文<BR>
+　　　　Constraint &quot;score_pkey&quot; Primary Key (&quot;snm&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-2"></A><B><FONT FACE="ＭＳ 明朝">２）リゾート</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　候補であるリゾートに関する情報を保持します。<BR>
+　　　　CREATE TABLE &quot;resort&quot; ( -- リゾート<BR>
+　　　　&quot;rnm&quot; bigint NOT NULL, -- リゾート番号<BR>
+　　　　&quot;nam&quot; character varying(60) NOT NULL, -- リゾート名称<BR>
+　　　　&quot;inf&quot; character varying(500), -- リゾートの説明文<BR>
+　　　　&quot;fil&quot; character varying(200), -- 付加情報（未使用）<BR>
+　　　　Constraint &quot;resort_pkey&quot; Primary Key (&quot;rnm&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-3"></A><B><FONT FACE="ＭＳ 明朝">３）リゾートスコア値</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　リゾートに付随するスコア値を保持します。２）のリゾートに付随して０個<BR>
+　以上が作成されます。<BR>
+　　　　CREATE TABLE &quot;rvalue&quot; ( -- リゾートに付随するスコア値<BR>
+　　　　&quot;rnm&quot; bigint NOT NULL, -- 対応するリゾート番号<BR>
+　　　　&quot;snm&quot; bigint NOT NULL, -- 対応するスコア番号<BR>
+　　　　&quot;scn&quot; bigint NOT NULL, -- スコア値<BR>
+　　　　Constraint &quot;rvalue_pkey&quot; Primary Key (&quot;rnm&quot;,
+&quot;snm&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-4"></A><B><FONT FACE="ＭＳ 明朝">４）質問</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　質問に関する情報を保持します。 <BR>
+　　　　CREATE TABLE &quot;question&quot; ( -- 質問<BR>
+　　　　&quot;qnm&quot; bigint NOT NULL, -- 質問番号<BR>
+　　　　&quot;flg&quot; shortint,　　　　　　　　　　　　-- フラグ 0:複数選択不可<BR>
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　 1:複数選択可<BR>
+　　　　&quot;inf&quot; character varying(500) NOT NULL, -- 質問文<BR>
+　　　　Constraint &quot;question_pkey&quot; Primary Key (&quot;qnm&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-5"></A><B><FONT FACE="ＭＳ 明朝">５）回答</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　回答に関する情報を保持します。４）の質問に付随して２個以上が作成され<BR>
+　　ます。<BR>
+　　　　CREATE TABLE &quot;answer&quot; ( -- 回答<BR>
+　　　　&quot;anm&quot; bigint NOT NULL, -- 回答の番号<BR>
+　　　　&quot;qnm&quot; bigint NOT NULL, -- 対応する質問番号<BR>
+　　　　&quot;inf&quot; character varying(500) NOT NULL, -- 回答文<BR>
+　　　　Constraint &quot;answer_pkey&quot; Primary Key (&quot;anm&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-6"></A><B><FONT FACE="ＭＳ 明朝">６）回答スコア値</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　回答に関するスコア情報を保持します。５）の回答に付随して０個以上が作<BR>
+　　成されます。<BR>
+　　　　CREATE TABLE &quot;avalue&quot; ( -- 回答スコア<BR>
+　　　　&quot;anm&quot; bigint NOT NULL, -- 回答の番号<BR>
+　　　　&quot;snm&quot; bigint NOT NULL, -- 対応するスコア番号<BR>
+　　　　&quot;scn&quot; bigint NOT NULL, -- スコア値<BR>
+　　　　Constraint &quot;avalue_vkey&quot; Primary Key (&quot;anm&quot;,
+&quot;snm&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-7"></A><B><FONT FACE="ＭＳ 明朝">７）回答者</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　利用者に関する情報を保持します。<BR>
+　　　　CREATE SEQUENCE usq START 1001 -- 自動付番<BR>
+　　　　　MAXVALUE 2000;<BR>
+　　　　CREATE TABLE &quot;usr&quot; ( -- 回答者<BR>
+　　　　&quot;unm&quot; bigint NOT NULL -- ユーザ番号<BR>
+　　　　　DEFAULT NEXTVAL('usq'),<BR>
+　　　　&quot;nam&quot; character varying(40) NOT NULL -- ユーザ名<BR>
+　　　　　UNIQUE,<BR>
+　　　　&quot;age&quot; bigint, -- 年齢<BR>
+　　　　&quot;uex&quot; bigint, -- 性別 1:男 2:女<BR>
+　　　　&quot;mad&quot; character varying(40), -- メールアドレス<BR>
+　　　　&quot;adr&quot; character(2), -- 居住地コード<BR>
+　　　　&quot;tim&quot; timestamp with time zone -- 登録日時<BR>
+　　　　　　　DEFAULT now(),<BR>
+　　　　&quot;fil&quot; character varying(200), -- 付加情報（現在未使用）<BR>
+　　　　Constraint &quot;usr_pkey&quot; Primary Key (&quot;unm&quot;)<BR>
+　　　　);<BR>
+　ユーザ番号は自動設定<BR>
+　ユーザ名、年齢、性別、メールアドレスはユーザ入力値</FONT></P>
+
+<P><A NAME="s3-1-2-8"></A><B><FONT FACE="ＭＳ 明朝">８）結果</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　回答による集計結果の総括を保持します。<BR>
+　　　　CREATE SEQUENCE ksq MINVALUE 1001 -- 自動付番<BR>
+　　　　　MAXVALUE 20000;<BR>
+　　　　CREATE TABLE &quot;kekka&quot; ( -- 結果<BR>
+　　　　&quot;knm&quot; bigint NOT NULL -- 結果番号<BR>
+　　　　　DEFAULT NEXTVAL('ksq'),<BR>
+　　　　&quot;unm&quot; bigint NOT NULL, -- ユーザ番号<BR>
+　　　　&quot;tim&quot; timestamp with time zone -- 登録日時<BR>
+　　　　　　DEFAULT now(),<BR>
+　　　　&quot;tsc&quot; integer NOT NULL, -- 最高スコア値<BR>
+　　　　&quot;mnr&quot; bigint NOT NULL, -- 最高スコアリゾート番号<BR>
+　　　　Constraint &quot;kekka_pkey&quot; Primary Key (&quot;knm&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-9"></A><B><FONT FACE="ＭＳ 明朝">９）結果一覧</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　利用者が選択した個々の回答情報を保持します。<BR>
+　　　　CREATE TABLE &quot;krec&quot; ( -- 結果一覧<BR>
+　　　　&quot;knm&quot; bigint NOT NULL, -- 結果番号<BR>
+　　　　&quot;anm&quot; bigint NOT NULL, -- 回答番号<BR>
+　　　　&quot;val&quot; bigint NOT NULL, -- スコアに対する重み<BR>
+　　　　　　　　　　　　　　　　　　　　　　　--（現状1のみ）<BR>
+　　　　Constraint &quot;krec_pkey&quot; Primary Key (&quot;knm&quot;,
+&quot;anm&quot; )<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-2-10"></A><B><FONT FACE="ＭＳ 明朝">１０）セッション情報</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　　　各アプレットの進行状況を保持します。<BR>
+　　　　CREATE SEQUENCE ssq MINVALUE 100001; -- 自動付番<BR>
+　　　　CREATE TABLE &quot;session&quot; ( -- 結果<BR>
+　　　　&quot;sid&quot; bigint NOT NULL -- セッションID<BR>
+　　　　　DEFAULT NEXTVAL('ssq'),<BR>
+　　　　&quot;ver&quot; bigint NOT NULL, -- バージョン<BR>
+　　　　&quot;dit&quot; bigint NOT NULL, -- データ種別<BR>
+　　　　&quot;tim&quot; timestamp with time zone -- 初期登録日時<BR>
+　　　　　　　DEFAULT now(),<BR>
+　　　　&quot;ipa&quot; integer, -- IPアドレス <BR>
+　　　　&quot;sta&quot; integer NOT NULL, -- 処理ステータス<BR>
+　　　　&quot;tup&quot; timestamp with time zone -- 最終更新日時<BR>
+　　　　　　　DEFAULT now(), <BR>
+　　　　Constraint &quot;sid_pkey&quot; Primary Key (&quot;sid&quot;)<BR>
+　　　　);</FONT></P>
+
+<P><A NAME="s3-1-3"></A><B><FONT FACE="ＭＳ 明朝">３－１－３　データ処理の流れ<BR>
+</FONT></B><FONT FACE="ＭＳ 明朝">　　　<B><BR>
+　</B>データ処理の流れを簡単に説明します。<BR>
+　１）～６）は事前に準備されています。システムの利用を開始すると、４）、５）の質<BR>
+問、回答情報が参照されアプレットに渡されます。<BR>
+　アプレットはそれを表示し、利用者は回答を選択します。<BR>
+　選択された回答情報は９）結果一覧に格納されます。<BR>
+　そして、各リゾートのスコア値の計算、上位リゾートのスコア値、情報がアプレットに<BR>
+返されます。<BR>
+　スコア値の計算は次の一文のＳＱＬでおこなわれます。<BR>
+<BR>
+　　pgsql=# select aa.nam,bb.stl from<BR>
+　　pgsql-# resort aa,<BR>
+　　pgsql-# 　(<BR>
+　　pgsql(# 　　select a.rnm as rnm, sum(a.scn * b.atl ) as stl from<BR>
+　　pgsql(# 　　　rvalue a,<BR>
+　　pgsql(# 　　( select snm,sum(scn) as atl from avalue where anm
+in<BR>
+　　pgsql(# 　　　(select anm from krec where knm = 1001 )<BR>
+　　pgsql(# 　　　group by snm ) b<BR>
+　　pgsql(# 　　where a.snm = b.snm group by a.rnm<BR>
+　　pgsql(# 　) bb<BR>
+　　pgsql-# 　where bb.rnm = aa.rnm;<BR>
+　　 nam　　| stl<BR>
+　　--------+-----<BR>
+　　 グアム | 296<BR>
+　　 沖縄　 | 418<BR>
+　　 タヒチ | 265<BR>
+　　 江ノ島 | 270<BR>
+　　(4 rows)<BR>
+<BR>
+　上の例は<A HREF="outline.html#t1-3">１－３のスコア計算表</A>内容をＤＢ化けし、psql上でＳＱＬを実行しました。<BR>
+　結果番号が1001番の回答について各リゾートの集計をおこなっています。<BR>
+　手計算でおこなったときは、１時間は費やしました。<BR>
+　結果をみるとそんなにかからないとおもうかもしれませんが、ない状態からですから、<BR>
+大変です。それが上記の一文（といってもずいぶん長いけど）のＳＱＬで一瞬にして得られるのです。<BR>
+<BR>
+　※　参考までに関連するテーブルのデータを<A HREF="add-1.txt">付録－１</A>に添付しました。<BR>
+　興味のある方はＯｒａｃｌｅやＩｎｆｏｒｍｉｘでも試してみてください。<BR>
+<BR>
+</FONT><A HREF="detail.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_flow.html">next</A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,92 @@
+<HTML>
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0J Win">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=UTF-8">
+  <TITLE>３－３　電文</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><A HREF="d_flow.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_class.html">next</A><BR>
+<BR>
+<A NAME="s3-3"></A><B><FONT SIZE="+1" FACE="ＭＳ 明朝">３－３　電　文<BR>
+<BR>
+</FONT></B><FONT FACE="ＭＳ 明朝">　ここではサーバ・クライアント間で送受信する電文、メッセージについての基本<BR>
+的な決まりごとについて説明します。<BR>
+<BR>
+</FONT><A NAME="s3-3-1"></A><B><FONT FACE="ＭＳ 明朝">３－３－１　文字コード</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　電文は全てＳＪＩＳを使用しています。<BR>
+<BR>
+</FONT><A NAME="s3-3-2"></A><B><FONT FACE="ＭＳ 明朝">３－３－２　送受信法</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　クライアントアプレット側ではＰｏｓｔメソッドを使用しています。<BR>
+　サーバ側は標準入出力へのアクセスによりクライアントとデータ交換をおこなって<BR>
+　います。<BR>
+<BR>
+</FONT><A NAME="s3-3-3"></A><B><FONT FACE="ＭＳ 明朝">３－３－３　電文フォーマット</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　全て平文です。<BR>
+　基本的な形式は<BR>
+<BR>
+　クライアント-&gt;サーバ<BR>
+　例１）<BR>
+　＋－－－＋－－－－－－－－－－－－－－－－－－＋<BR>
+　｜行番号｜　内　　容　　　　　　　　　　　　　｜<BR>
+　＋－－－＋－－－－－－－－－－－－－－－－－－＋<BR>
+　｜　　 1｜DT= 各パラメータの並び　　　　　　　｜<BR>
+　＋－－－＋－－－－－－－－－－－－－－－－－－＋<BR>
+　　必ず１行、最大1024バイト<BR>
+<BR>
+　サーバ-&gt;クライアント<BR>
+　例２）<BR>
+　＋－－－＋－－－－－－－－－－－－－－－－－－＋<BR>
+　｜行番号｜　内　　容　　　　　　　　　　　　　｜<BR>
+　＋－－－＋－－－－－－－－－－－－－－－－－－＋<BR>
+　｜　　 1｜Content-type: text/plain　　　　　　｜<BR>
+　｜　　 2｜　　　　　　　　　　　　　　　　　　｜<BR>
+　｜　　 3｜Post-Start 　　　　　　　　　　　 　｜<BR>
+　｜　　 4｜処理結果、固有パラメータの並び　　　｜<BR>
+　｜　　 5｜固有パラメータの並び　　　　　　　　｜<BR>
+　｜　　　｜,,, 　　　　　　　　　　　　　　　　｜<BR>
+　｜　　　｜,,, 　　　　　　　　　　　　　　　　｜<BR>
+　｜　 n-1｜,,,　　 　　　　　　　　　　　　　　｜<BR>
+　｜　　 n｜Post-End　　　　　　　　　　　　　　｜<BR>
+　＋－－－＋－－－－－－－－－－－－－－－－－－＋<BR>
+　　１行以上からなる、最大行数は無既定、１行の最大長は1024バイト<BR>
+　　nは最終行<BR>
+　　1,2,3,nの内容は固定<BR>
+　　処理結果は３桁の数字、正常終了時は100、異常終了時のコードは例外を参照してく<BR>
+　　ださい。<BR>
+<BR>
+</FONT><A NAME="s3-3-4"></A><B><FONT FACE="ＭＳ 明朝">３－３－４　電文例</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+<BR>
+　”３－２　処理の流れ　２）実行データの取得”　は</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">　クライアント　-&gt;　サーバ　（要求）<BR>
+　DT=10001,110　　　＃　セッションID=1001,処理ステータス=110=質問・回答取得<BR>
+<BR>
+　サーバ　－＞　クライアント　（応答）<BR>
+　DT=10001,100,2　　<BR>
+　＃ DT=SID,処理ステータス=100=正常終了,回答数<BR>
+　1,0,何日旅行がしたいですか？,4<BR>
+　＃　質問番号、質問フラグ,質問文,回答数<BR>
+　10101,日帰り<BR>
+　＃　回答番号,回答内容<BR>
+　10102,２泊３日 <BR>
+　10103,４泊５日<BR>
+　10104,１０日まで<BR>
+　2,1,どんな旅がいいですか？<BR>
+　10201,とにかく手軽で安い<BR>
+　10202,たくさんおみやげを買いたい<BR>
+　10203,きれいな海をみたい<BR>
+<BR>
+　注　＃以降は説明のためのコメントです。<BR>
+<BR>
+</FONT><A HREF="d_flow.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_class.html">next</A><FONT FACE="ＭＳ 明朝"><BR>
+　</FONT>
+
+</BODY>
+</HTML>

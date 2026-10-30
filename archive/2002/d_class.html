@@ -1,0 +1,311 @@
+<HTML>
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0J Win">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=UTF-8">
+  <TITLE>３－４　クラス一覧</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><A HREF="d_msg.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_cgi.html">next</A><BR>
+<BR>
+<A NAME="s5"></A><B><FONT SIZE="+1" FACE="ＭＳ 明朝">３－４　アプレットクラス</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+<BR>
+　本システムで使用しているクラスの説明です。<BR>
+<BR>
+</FONT><A NAME="s5-1"></A><B><FONT FACE="ＭＳ 明朝">３－４－１　ＱＡＲ　<BR>
+　　質問より得られた回答より、希望に近い候補を提示する。<BR>
+<BR>
+</FONT></B><FONT FACE="ＭＳ 明朝">　java.awt.Applet<BR>
+　+ Answer<BR>
+<B><BR>
+　　プロパティ概要<BR>
+</B>Vector qq = new Vector(); // 全質問・回答(Question)の集合<BR>
+Vector rr = new Vector(); // 計算結果、上位５位までResultの集合</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">Befor befor; // = new Befor(); // 開始前画面<BR>
+public Base base ; //= new Base(); // 最初の画面<BR>
+Vector qqgg = new Vector(); // 全質問・回答画面の集合<BR>
+Vector aaa = new Vector(); // 回答であるCheckboxの集合<BR>
+Vector rr = new Vector(); // 計算結果、上位５位までResultの集合</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">Befor befor; // = new Befor(); // 開始前画面<BR>
+public Base base ; //= new Base(); // 最初の画面<BR>
+Vector qqgg = new Vector(); // 全質問・回答画面の集合<BR>
+Kekka kekka; // = new Kekka(); // 最終結果画面<BR>
+Vector gm = new Vector(); // 全画面の集合</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝">Button bback = new Button(); // 進めボタン<BR>
+Button bgo = new Button(); // 戻るボタン<BR>
+Label msg = new Label(); // 操作促進メッセージ<BR>
+String sid = new String(); // セッションID<BR>
+boolean basesendflg = true;　// サーバからの質問回答情報取得状態のフラグ　　 <BR>
+int errno; // エラー番号<BR>
+String errmsg = new String(); // エラーメッセージ<BR>
+　　エラー状態でなければ、errno=0,errmsg=&quot;&quot;である。<BR>
+GM now=new GM(); // 現在表示の画面<BR>
+<BR>
+</FONT><A NAME="anchor253930"></A><B><FONT FACE="ＭＳ 明朝">　メソッド概要<BR>
+</FONT></B><A NAME="anchor254355"></A><FONT FACE="ＭＳ 明朝">　　conn()<BR>
+　　　サーバcgi(post1.cgi)を起動し、初期交渉をおこないます。<BR>
+　　　sidにセッションＩＤを設定します。<BR>
+<BR>
+</FONT><A NAME="anchor254773"></A><FONT FACE="ＭＳ 明朝">　　getqa()<BR>
+　　　サーバcgi(post2-1.cgi)を起動し、質問・回答情報を取得し、qqggに格納しま<BR>
+　　　す。<BR>
+<BR>
+</FONT><A NAME="anchor255097"></A><FONT FACE="ＭＳ 明朝">　　sendbase()<BR>
+　　　baseよりユーザ情報を取得し、サーバcgi(post2-2.cgi)を起動し、ユーザ情報<BR>
+　　　をサーバＤＢに書きこみます。<BR>
+<BR>
+</FONT><A NAME="anchor255512"></A><FONT FACE="ＭＳ 明朝">　　sendget()<BR>
+　　　aaaより回答情報を取得しサーバcgi(post3.cgi)を起動し、サーバに回答を送<BR>
+　　　信します。結果情報を取得し</FONT></P>
+
+<P><FONT FACE="ＭＳ 明朝"><BR>
+<BR>
+</FONT><A NAME="anchor255943"></A><FONT FACE="ＭＳ 明朝">　　init_set()<BR>
+　　　実行環境を整備します。<BR>
+<BR>
+</FONT><A NAME="anchor256365"></A><FONT FACE="ＭＳ 明朝">　　makqg()<BR>
+　　　質問実施画面を作成します。<BR>
+<BR>
+</FONT><A NAME="anchor256791"></A><FONT FACE="ＭＳ 明朝">　　hyozi()<BR>
+　　　表示画面の入れ替えをおこないます。<BR>
+　　<BR>
+<BR>
+</FONT><A NAME="s5-2"></A><B><FONT FACE="ＭＳ 明朝">３－４－２　Ａｎｓｗｅｒ　回答</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+<BR>
+　java.lang.Object<BR>
+　+ Answer<BR>
+<BR>
+</FONT><A NAME="anchor268644"></A><FONT FACE="ＭＳ 明朝">　プロパティの概要<BR>
+　　int　　anm;　　　回答番号<BR>
+　　String inf;　　　回答文<BR>
+　　int　　flg;　　　フラグ　この質問が選択された場合は1、それ以外は0<BR>
+<BR>
+</FONT><A NAME="anchor269557"></A><FONT FACE="ＭＳ 明朝">　コンストラクタの概要<BR>
+　　Answer( int a, String i )<BR>
+　　　回答番号a、回答文iの新しい回答を作成します。<BR>
+<BR>
+</FONT><A NAME="anchor269959"></A><FONT FACE="ＭＳ 明朝">　メソッドの概要<BR>
+　　void setvl( int v )<BR>
+　　　選択フラグ設定<BR>
+<BR>
+</FONT><A NAME="anchor271666"></A><FONT FACE="ＭＳ 明朝">　　boolean
+isanm( int n )<BR>
+　　　指定回答か、否か　指定回答であればtrue,違う場合はfalseを返します。<BR>
+<BR>
+</FONT><A NAME="anchor272170"></A><FONT FACE="ＭＳ 明朝">　　int getvl(
+int n )<BR>
+　　　選択フラグ値取得nが回答番号一致する場合は選択値を、しない場合は0<BR>
+　　　を返す<BR>
+<BR>
+</FONT><A NAME="anchor272497"></A><FONT FACE="ＭＳ 明朝">　　int getvl()<BR>
+　　　選択フラグ値取得　選択フラグの値を返します。<BR>
+<BR>
+</FONT><A NAME="anchor272817"></A><FONT FACE="ＭＳ 明朝">　　String
+getinf()<BR>
+　　　回答文取得　回答文を返します。<BR>
+<BR>
+</FONT><A NAME="anchor273196"></A><FONT FACE="ＭＳ 明朝">　　int getanm()<BR>
+　　　回答番号取得　回答番号を返します。<BR>
+<BR>
+</FONT><A NAME="s5-3"></A><B><FONT FACE="ＭＳ 明朝">３－４－３　Ｑｕｅｓｔｉｏｎ　質問（複数回答との対）</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+<BR>
+　java.lang. Object<BR>
+　+ Question<BR>
+<BR>
+　プロパティ<BR>
+　　int　　qnm;　　　質問番号<BR>
+　　int　　flg;　　　質問選択フラグ 複数選択可能か否か<BR>
+　　String inf;　　　質問文<BR>
+　　Vector ans;　　　この質問に対応する<A HREF="#s5-2">Answer</A>の集合<BR>
+<BR>
+　コンストラクタの概要<BR>
+　　Question()<BR>
+　　　空の質問を作成します。<BR>
+　　Question( int a, String i )<BR>
+　　　質問番号a、質問文i、選択フラグ0の質問を作成します。<BR>
+　　Question( int a, String i, int f )<BR>
+　　　質問番号a、質問文i、選択フラグfの質問を作成します。<BR>
+<BR>
+　メソッドの概要<BR>
+　　void addan( int a, String i )<BR>
+　　　回答番a,回答文iの新しい<A HREF="#s5-2">Answer</A>を作成して、追加します。<BR>
+　　boolean isqnm( int n )<BR>
+　　　指定質問番号nか否かを返します。<BR>
+　　String getinf()<BR>
+　　　質問文を返します。<BR>
+　　int getqnm()<BR>
+　　　質問番号を返します。<BR>
+　　int getflg()<BR>
+　　　選択フラグを返します。<BR>
+　　Vector getans()<BR>
+　　　回答の集合を返します。<BR>
+<BR>
+</FONT><A NAME="s5-4"></A><B><FONT FACE="ＭＳ 明朝">３－４－４　Ｒｅｓｕｌｔ　回答により計算、返却された結果（１メンバ）</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+<BR>
+　java.lang. Object<BR>
+　+ Result<BR>
+<BR>
+　プロパティの概要<BR>
+　　int　　rnm;　　　候補番号<BR>
+　　String nam;　　　候補名<BR>
+　　int　　val;　　　総合スコア値<BR>
+　　int　　rank;　　 順位<BR>
+　　String inf;　　　候補に関する説明<BR>
+<BR>
+　コンストラクタの概要<BR>
+　　Result()<BR>
+　　　空の結果を作成します。<BR>
+　　Result(String n, int r, int v)<BR>
+　　　候補番号0,候補名n,順位r,総合スコアv,説明&quot;&quot;の結果を作成します。<BR>
+　　Result(int m, String n, int r, int v, String f)　　　<BR>
+　　　候補番号m,候補名n,順位r,総合スコアv,説明f,の結果を作成します。<BR>
+<BR>
+　メソッドの概要<BR>
+　　int getrnm(),String getnam(),int getval(),int getrank(),String
+getinf()<BR>
+　　　各プロパティの値を返します。<BR>
+<BR>
+<BR>
+ここからは、java.awtを継承した内部クラスとなります。<BR>
+画面系ではレイアウトマネージャーを使用しておらず、setBounds()メソッドにより<BR>
+変形、配置されます。<BR>
+<BR>
+</FONT><A NAME="s5-5"></A><B><FONT FACE="ＭＳ 明朝">３－４－５　ＧＭ　画面</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　java.awt.Panel<BR>
+　+ GM<BR>
+　このシステムで使用する画面のベースとなるクラスです。<BR>
+<BR>
+　プロパティの概要<BR>
+　　String name;　　画面名<BR>
+　　GM　　 next;　　前画面<BR>
+　　GM　　 prev;　　次画面<BR>
+　　int　　ye;　　　このパネルの含まれるObjectのある最下y座標の値<BR>
+　　String msg; 　　エラー発生時のメッセージ<BR>
+<BR>
+　コンストラクタ概要<BR>
+　　GM()<BR>
+　　　本システムの規定値（サイズ、背景色）にてPanelを作成し、非表示とする。<BR>
+　　　next,prevにはnullが設定される。<BR>
+<BR>
+　メソッド概要<BR>
+　　void setname( String n ), void setnext( GM n), void setprev(
+GM p ),<BR>
+　　void setye( int y )<BR>
+　　　各プロパティの値を設定します。<BR>
+<BR>
+　　String getname(), GM getnext(), GM getprev(), int getye(),String
+getmsg()<BR>
+　　　各プロパティ値を返します。<BR>
+<BR>
+　 GM goact()<BR>
+　　　次画面移動時の処理（継承するクラスによりオーバーライドされる）をおこない<BR>
+　　　ます。次画面が存在し、かつ処理が正常に終了した場合は自身を非表示として、<BR>
+　　　次画面を返します。<BR>
+　　　次画面が存在しない、または処理が異常終了した場合はnullを返して、必要に<BR>
+　　　応じてmsgに理由を設定します。<BR>
+<BR>
+　 GM backact()<BR>
+　　　前画面移動時の処理（継承するクラスによりオーバーライドされる）をおこない<BR>
+　　　ます。前画面が存在し、かつ処理が正常に終了した場合は自身を非表示として、<BR>
+　　　前画面を返します。<BR>
+　　　前画面が存在しない、または処理が異常終了した場合はnullを返して、必要に<BR>
+　　　応じてmsgに理由を設定します。<BR>
+<BR>
+</FONT><A NAME="s5-6"></A><B><FONT FACE="ＭＳ 明朝">３－４－６　Ｂａｓｅ　初期入力画面</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　java.awt.Panel<BR>
+　+ <A HREF="#s5-5">GM</A><BR>
+　　+ Base<BR>
+<BR>
+　ユーザ情報を入力する画面です。<BR>
+<BR>
+　コンストラクタの概要<BR>
+　　base()<BR>
+　　　初期画面（ユーザ情報入力画面）を作成します。<BR>
+<BR>
+　プロパティの概要<BR>
+<BR>
+　メソッドの概要<BR>
+　　String getname(),String getmaddr(),String getaddr(),int getage(),<BR>
+　　int getsex()<BR>
+　　各入力内容を取得します。<BR>
+<BR>
+　　GM goact()<BR>
+　　入力内容をチェックし、誤りがなければサーバ処理を起動して、ユーザ情報を<BR>
+　　サーバＤＢに書きこみします。処理が正常終了し、次画面が存在すれば、次画面の<BR>
+　　アドレスを返します。<BR>
+　　入力に誤りがある。サーバ処理にてエラーが発生した。あるいは次画面が存在しない<BR>
+　　場合はnullを返し、msgにエラーを設定します。<BR>
+<BR>
+</FONT><A NAME="s5-7"></A><B><FONT FACE="ＭＳ 明朝">３－４－７　ＱＡＧ　質問回答画面</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　java.awt.Panel<BR>
+　+ <A HREF="#s5-5">GM</A><BR>
+　　+ QAG<BR>
+<BR>
+　質問・回答を表示し、利用者が回答選択をおこなう画面です。<BR>
+<BR>
+　コンストラクタの概要<BR>
+　　QAG()<BR>
+　　　空の画面を作成します。<BR>
+<BR>
+　プロパティの概要<BR>
+　　int　　qcnt;　この画面に含まれる質問の数<BR>
+<BR>
+　メソッドの概要<BR>
+　　int getqcnt()<BR>
+　　　この画面に含まれる質問の数を返します。<BR>
+　　boolean canadd( <A HREF="#s5-3">Question</A> q )<BR>
+　　　質問qがこの画面に追加可能か（画面に納まるか）を返します。<BR>
+　　boolean addqa( int n, <A HREF="#s5-3">Question</A> q )<BR>
+　　　質問番号nとして、質問qをこの画面に追加します。追加できればtrue,できなけれ<BR>
+　　　ばfalseを返します。　<BR>
+　　GM goact()<BR>
+　　入力内容をチェックし、次画面のクラスが<A HREF="#s5-8">Kekka</A>場合は回答情報を送信し、結果情報<BR>
+　　を取得し、正常終了すると<A HREF="#s5-4">Result</A>の集合を作成し、次画面を返します。<BR>
+　　次画面が<A HREF="#s5-8">Kekka</A>以外の場合は次画面を返します。<BR>
+　　入力に誤りがある。サーバ処理でエラーが発生した。あるいは次画面が存在しない<BR>
+　　場合はnullを返し、msgにエラーを設定します。<BR>
+<BR>
+</FONT><A NAME="s5-8"></A><B><FONT FACE="ＭＳ 明朝">３－４－８　Ｋｅｋｋａ　結果画面</FONT></B><FONT
+ FACE="ＭＳ 明朝"><BR>
+　java.awt.Panel<BR>
+　+ <A HREF="#s5-5">GM</A><BR>
+　　+ Kekka<BR>
+<BR>
+　回答より計算された結果情報を表示する画面です。<BR>
+<BR>
+　コンストラクタの概要<BR>
+　　Kekka()<BR>
+　　　結果画面（結果の情報は未設定画面）を作成します。<BR>
+<BR>
+　プロパティの概要<BR>
+<BR>
+　メソッドの概要<BR>
+　　void refresh()<BR>
+　　　結果情報が設定される各オブジェクトの設定値を初期化します。<BR>
+<BR>
+　　void setrnm(String n)<BR>
+　　　１位候補の名前nを設定します。<BR>
+<BR>
+　　void setinf(String i)<BR>
+　　　一位候補の説明文iを設定します。<BR>
+<BR>
+　　void addrank(String n, int v)<BR>
+　　　上位候補表示覧に候補n,総合スコアnを追加します。<BR>
+<BR>
+</FONT><A HREF="d_msg.html">prev</A>　　　　　　　　　　　　　　　　　　　<A HREF="inf.html">head</A>　　　　　　　　　　　　　　　　　　　　　　　　　　<A
+HREF="d_cgi.html">next</A><BR>
+<BR>
+
+</BODY>
+</HTML>
