@@ -21,7 +21,7 @@
 |---|---|
 | [`docs/`](docs/index.md) | **説明用仕様書**（概要、構成、AI 連携設計、品質保証、運用、2002 年版との比較、今後の方針） |
 | [`reference/`](reference/README.md) | **参考実装**。本番とは別に書き下ろした小さなコードと、テスト 32 件。標準ライブラリのみで動く |
-| [`archive/2002/`](archive/2002/inf.html) | **2002 年版の設計資料**（原文のまま） |
+| [`archive/2002/`](https://tasamu61.github.io/qar-docs/archive/2002/inf.html) | **2002 年版の設計資料**（原文のまま） |
 
 ## 実装状況
 
@@ -65,4 +65,4 @@
 **そのほか**
 
 - [参考実装](reference/README.md)
-- [2002 年版の設計資料](archive/2002/index.html)
+- [2002 年版の設計資料](https://tasamu61.github.io/qar-docs/archive/2002/inf.html)
